@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
- 
+    <meta charset="UTF-8"> 
     <title>Questão 01</title>
 </head>
 <body>
+
     <form name="compras">
-        <div><label>Item: <input type="text" name="item"> </label></div>
-        <div><label>Quatidade: <input type="number" name="quantidade"> </label></div>
-        <input type="submit">
-        <input type="reset">
+        <div><label>Item: <input type="text" name="item"/>              </label></div>
+        <div><label>Quantidade: <input type="text" name="quantidade"/>  </label></div>
+        <input type="submit"/>
+        <input type="reset"/>
     </form>
 
     <h1>Lista de compras:</h1>
-    <dl>
+    <ul id="listaE">
 
-    </dl>
+    </ul>
 
     <script>
-        var formCompras = document.forms.compras;
-        formCompras.addEventListener("submit", processaCompras);
+        
+        var lista = document.getElementById("listaE");
 
-    
-    
-    
+        var formCompras = document.forms.compras;
+
+        document.forms.compras.addEventListener("submit", function processaEnvio(e)
+        {
+            e.preventDefault();
+            console.log("Formulario enviado!");
+
+            var item = formCompras.item.value;
+            var quantidade = formCompras.quantidade.value;
+            console.log(item, quantidade);
+
+            var novoLi = document.createElement("li");
+            novoLi.textContent = item+" quantidade: "+quantidade;
+            lista.appendChild(novoLi);
+
+            formCompras.reset();
+            formCompras.item.focus();
+        });
     
     </script>
-
 
 </body>
 </html>
