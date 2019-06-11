@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Questão 03</title>
+</head>
+<body>
+    <form name="participantes">
+        <div><label>Nome:   <input  type="text" name="nome">    </label></div>
+        <div><label>Idade:  <input type="number" name="idade">  </label></div>
+        <input type="submit">
+    </form>
+
+    <ul id="lAdultos">
+    </ul>
+
+    <ul id="lEstudantes">
+    </ul>
+
+    <script>
+        var estudantes = document.getElementById("lEstudantes");
+        var adultos = document.getElementById("lAdultos");
+        var fLista = document.forms.participantes; 
+
+        fLista.addEventListener("submit", function adiciona(e){
+            e.preventDefault();
+            var nome = fLista.nome.value;
+            var idade = fLista.idade.value;
+            console.log("Nome: "+nome+" Idade: "+idade);
+
+            fLista.reset();
+        });
+
+    </script>
+    
+</body>
+</html>
