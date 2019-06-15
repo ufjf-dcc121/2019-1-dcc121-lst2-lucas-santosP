@@ -5,33 +5,122 @@
     <title>Questão 03</title>
 </head>
 <body>
-    <form name="participantes">
-        <div><label>Nome:   <input  type="text" name="nome">    </label></div>
-        <div><label>Idade:  <input type="number" name="idade">  </label></div>
-        <input type="submit">
-    </form>
-
-    <ul id="lAdultos">
-    </ul>
-
-    <ul id="lEstudantes">
-    </ul>
-
-    <script>
-        var estudantes = document.getElementById("lEstudantes");
-        var adultos = document.getElementById("lAdultos");
-        var fLista = document.forms.participantes; 
-
-        fLista.addEventListener("submit", function adiciona(e){
-            e.preventDefault();
-            var nome = fLista.nome.value;
-            var idade = fLista.idade.value;
-            console.log("Nome: "+nome+" Idade: "+idade);
-
-            fLista.reset();
-        });
-
-    </script>
     
+    <form name="participantes">
+        <div id="corpoform">
+            <label>Nome:   <input type="text"   name="nome"></label>
+            <label>Idade:  <input type="number" name="idade"></label>
+        </div>
+            <input type="submit" value="Enviar" style="margin: 5px; width: 270.5px; height: 25px; text-align: center">
+    </form>
+    
+    <!--Botão para remover um participante selecionado-->
+    <button id="botaoR" style="margin: 5px; width: 128.5px; height: 25px;">Remover</button>
+    <!--Botão para cancelar a seleção de um participante-->
+    <button id="botaoC" style="margin: 5px; width: 128.5px; height: 25px;">Cancelar Seleção</button>
+
+    <div id="corpoListas">
+        <h4>Adultos:</h4>
+            <ul id="lAdultos">
+            </ul>
+
+        <h4>Estudantes:</h4>
+            <ul id="lEstudantes">
+            </ul>
+    </div>
+    
+    <script>
+        var listaEstudantes = document.getElementById("lEstudantes");
+        var listaAdultos = document.getElementById("lAdultos");
+        var formulario = document.forms.participantes;
+        var liAtual = null;     //Variavel usada na função de remover, para saber qual elemento remover
+        
+        var botaoRemover = document.getElementById("botaoR");
+        botaoRemover.style.visibility = "hidden";
+
+        var botaoCancelaSelecao = document.getElementById("botaoC");
+        botaoCancelaSelecao.style.visibility="hidden";
+
+        //Adiciona os valores do formulario nas listas
+        formulario.addEventListener("submit", adiciona);
+        //Remove um participante da lista
+        botaoRemover.addEventListener("click", remover);
+
+        function adiciona(e){
+            e.preventDefault();
+
+            var eNome = document.createElement("span");
+            var eIdade = document.createElement("span");
+
+            eNome.innerHTML = formulario.nome.value;
+            eIdade.innerHTML = Number(formulario.idade.value);
+
+            var Nli = document.createElement("li");
+            Nli.appendChild(eNome);
+            Nli.append(" - ");
+            Nli.appendChild(eIdade);
+
+            //Função chamada ao clickar num elemento
+            Nli.addEventListener("click", function(){
+                editaLista(Nli);    });
+            
+            //Adiciona o novo participante em uma das duas listas
+            if(formulario.idade.value < 18)
+                listaEstudantes.appendChild(Nli);
+            else
+                listaAdultos.appendChild(Nli);
+
+            formulario.nome.focus();
+            formulario.reset();
+        }
+
+        //Edita o participante selecionado
+        function editaLista(liClickado){
+            //Aqui a visibilidade do botão remover é usado como uma lastro para saber se algo foi selecionado ou não.
+            if(botaoRemover.style.visibility == "hidden"){
+                liAtual = liClickado;   //Passa valor para variavel liAtual, que é usada na função Remover
+
+                liClickado.style.color = "red";     //Destaca o item clickado mudando sua cor para vermelho
+                liClickado.firstChild.contentEditable = "true";
+                liClickado.lastChild.contentEditable = "true";
+                botaoRemover.style.visibility="visible";
+                botaoCancelaSelecao.style.visibility="visible";
+            }
+
+            botaoCancelaSelecao.addEventListener("click", function(){
+                liClickado.style.color = "black";   
+                liClickado.firstChild.contentEditable = "false";
+                liClickado.lastChild.contentEditable = "false";
+                botaoRemover.style.visibility = "hidden";
+                botaoCancelaSelecao.style.visibility = "hidden";
+            });
+        }
+
+        function remover(){
+            if(liAtual!=null){
+                if(Number(liAtual.lastChild.innerText) >= 18)
+                    listaAdultos.removeChild(liAtual);
+                else{
+                    listaEstudantes.removeChild(liAtual);
+                }
+                liAtual=null;
+                botaoRemover.style.visibility="hidden";
+                botaoCancelaSelecao.style.visibility="hidden";
+            }
+        }
+
+        //Estilos no formulario
+        document.getElementById("corpoform").style.border="thin solid black";
+        document.getElementById("corpoform").style.padding = "10px";
+        document.getElementById("corpoform").style.width = "250px";
+        document.getElementById("corpoform").style.margin = "5px";
+        document.getElementById("corpoform").style.textAlign = "right";
+        //Estilos nas listas
+        document.getElementById("corpoListas").style.border="thin solid black";
+        document.getElementById("corpoListas").style.padding = "10px";
+        document.getElementById("corpoListas").style.width = "250px";  
+        document.getElementById("corpoListas").style.margin = "5px";
+        document.getElementById("corpoListas").style.textAlign = "left";
+    </script>
 </body>
 </html>
