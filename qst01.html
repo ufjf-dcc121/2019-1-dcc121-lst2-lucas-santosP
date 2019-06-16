@@ -3,20 +3,33 @@
 <head>
     <meta charset="UTF-8"> 
     <title>Questão 01</title>
+    <style>
+        div{
+            padding: 5px;
+            width: 300px;
+            margin: 5px;
+            text-align: left;
+        }
+        div.cotorno{
+            border:thin solid black;
+        }
+    </style>
 </head>
 <body>
+    <div class="cotorno">
+        <form name="compras">
+            <div> <label>Item: <input type="text" name="item"/>              </label></div>
+            <div> <label>Quantidade: <input type="text" name="quantidade"/>  </label></div>
+            <input type="submit" value="Adicionar"/>
+            <input type="reset"/>
+        </form>
+    </div>
 
-    <form name="compras">
-        <div><label>Item: <input type="text" name="item"/>              </label></div>
-        <div><label>Quantidade: <input type="text" name="quantidade"/>  </label></div>
-        <input type="submit"/>
-        <input type="reset"/>
-    </form>
-
-    <h1>Lista de compras:</h1>
-    <ul id="listaE">
-
-    </ul>
+    <h3 style="padding: 5px;">Lista de compras:</h3>
+    <div class="cotorno"> 
+        <ul id="listaE">
+        </ul>
+    </div>
 
     <script>
         
@@ -27,18 +40,20 @@
         document.forms.compras.addEventListener("submit", function processaEnvio(e)
         {
             e.preventDefault();
-            console.log("Formulario enviado!");
+            if(formCompras.quantidade.value != "" && formCompras.quantidade.value != 0 && formCompras.item.value!= ""){
+                var item = formCompras.item.value;
+                var quantidade = formCompras.quantidade.value;
+                console.log(item, quantidade);
 
-            var item = formCompras.item.value;
-            var quantidade = formCompras.quantidade.value;
-            console.log(item, quantidade);
-
-            var novoLi = document.createElement("li");
-            novoLi.textContent = item+" quantidade: "+quantidade;
-            lista.appendChild(novoLi);
-
-            formCompras.reset();
-            formCompras.item.focus();
+                var novoLi = document.createElement("li");
+                novoLi.textContent = item+"  -  Quantidade: "+quantidade;
+                lista.appendChild(novoLi);
+    
+                formCompras.reset();
+                formCompras.item.focus();
+            }
+            else
+                alert("Valores Invalidos!");
         });
     
     </script>

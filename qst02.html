@@ -3,21 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Questão 02</title>
+    <style>
+        div{
+            padding: 5px;
+            width: 300px;
+            margin: 5px;
+            text-align: left;
+        }
+        div.cotorno{
+            border:thin solid black
+        }
+    </style>
 </head>
 <body>
 
-    <form name="listaOrd">
-        <div><label>Valor:  <input type="number" name="item">       </label></div> <br>
-        <div><label>        <input type="submit" value="EMPILHA">   </label></div>
-    </form> <br>
+    <div class="cotorno">
+        <form name="listaOrd">
+            <div> <label>Valor:<input type="number" name="item"> </label></div>
+            <div> <label> <input type="submit" value="EMPILHA"> </label></div>
+        </form>
+            <div><button id="desempilha">DESEMPILHA</button></div>  
+    </div>
 
-    <button id="desempilha">DESEMPILHA</button>
-    <p>Indice do Topo: <spa id="topo"></spa> </p>
-
-    <h2>PILHA: 
+    <div class="cotorno"> 
+    <h4>PILHA: 
         <ol>
         </ol>
-    </h2>
+    </h4>
+    </div>
 
     <script>
         var vetor=[];   //Vetor que armazenara os valores da pilha
@@ -28,19 +41,22 @@
         //FUNÇÃO EMPILHA
         document.listaOrd.addEventListener("submit", function adicionaItem(e){
             e.preventDefault();
-            var novoItem = document.forms.listaOrd.item.value;     //Recebe o valor do formulario
-            console.log("Adicionando valor: "+novoItem);
-            
-            tam=vetor.length;       //Recebe o tamanho do vetor em tam
-            vetor[tam]=novoItem;   //Adiciona o novo valor final do vetor
+            if(document.forms.listaOrd.item.value!= ""){ 
+                var novoItem = document.forms.listaOrd.item.value;     //Recebe o valor do formulario
+                console.log("Adicionando valor: "+novoItem);
+                
+                tam=vetor.length;       //Recebe o tamanho do vetor em tam
+                vetor[tam]=novoItem;   //Adiciona o novo valor final do vetor
 
-            var novoLi = document.createElement("li");  //Novo elemento do tipo <li>
-            novoLi.textContent = novoItem;              //Adiciona o valor do item 
-            lista.appendChild(novoLi);                  //Adiciona novoLi como filho da lista la no HTML
-            topo.textContent = tam;                     //Atualiza o valor do topo
+                var novoLi = document.createElement("li");  //Novo elemento do tipo <li>
+                novoLi.textContent = novoItem;              //Adiciona o valor do item 
+                lista.appendChild(novoLi);                  //Adiciona novoLi como filho da lista la no HTML
 
-            document.forms.listaOrd.reset();
-            document.forms.listaOrd.item.focus();
+                document.forms.listaOrd.reset();
+                document.forms.listaOrd.item.focus();
+            }
+        else
+            alert("Valor Invalido!");
         });
         
         //FUNÇÃO DESEMPILHA
@@ -50,20 +66,11 @@
                 lista.removeChild(document.getElementsByTagName("li")[tam-1]);  //remove o ultimo filho da lista Ord
                 tam=tam-1;
                 vetor.length=tam;
-
-                //Quando a pilha ficar vazia ao ser removido acima,
-                //o topo não pode passar a ser 0. Pois topo 0 é pilha com 1 elemento!
-                if(tam!=0)
-                    topo.textContent = tam;
-                else
-                    topo.textContent="";
             }
-            else{
-                console.log("Lista vazia!");
-            }
+            else
+                alert("Lista vazia!");
         });
         
     </script>
-
 </body>
 </html>
