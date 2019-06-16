@@ -3,23 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Questão 03</title>
+    <style>
+        div.corpoform{
+            border: thin solid black;
+            padding: 10px;
+            width: 250px;
+            margin: 5px;
+            text-Align: right;
+        }
+        div.corpoListas{
+            border: thin solid black;
+            padding: 10px;
+            width: 250px;
+            margin: 5px;
+            text-Align: left;
+        }
+    </style>
 </head>
 <body>
-    
+
     <form name="participantes">
-        <div id="corpoform">
+        <div class="corpoform">
             <label>Nome:   <input type="text"   name="nome"></label>
             <label>Idade:  <input type="number" name="idade"></label>
         </div>
             <input type="submit" value="Enviar" style="margin: 5px; width: 270.5px; height: 25px; text-align: center">
     </form>
     
-    <!--Botão para remover um participante selecionado-->
-    <button id="botaoR" style="margin: 5px; width: 128.5px; height: 25px;">Remover</button>
     <!--Botão para cancelar a seleção de um participante-->
     <button id="botaoC" style="margin: 5px; width: 128.5px; height: 25px;">Cancelar Seleção</button>
-
-    <div id="corpoListas">
+    <!--Botão para remover um participante selecionado-->
+    <button id="botaoR" style="margin: 5px; width: 128.5px; height: 25px;">Remover</button>
+    
+    <div class="corpoListas">
         <h4>Adultos:</h4>
             <ul id="lAdultos">
             </ul>
@@ -48,30 +64,33 @@
 
         function adiciona(e){
             e.preventDefault();
+            if(formulario.nome.value!="" && formulario.idade.value!= ""){ 
+                var eNome = document.createElement("span");
+                var eIdade = document.createElement("span");
 
-            var eNome = document.createElement("span");
-            var eIdade = document.createElement("span");
+                eNome.innerHTML = formulario.nome.value;
+                eIdade.innerHTML = Number(formulario.idade.value);
 
-            eNome.innerHTML = formulario.nome.value;
-            eIdade.innerHTML = Number(formulario.idade.value);
+                var Nli = document.createElement("li");
+                Nli.appendChild(eNome);
+                Nli.append(" - ");
+                Nli.appendChild(eIdade);
 
-            var Nli = document.createElement("li");
-            Nli.appendChild(eNome);
-            Nli.append(" - ");
-            Nli.appendChild(eIdade);
+                //Função chamada ao clickar num elemento
+                Nli.addEventListener("click", function(){
+                    editaLista(Nli);    });
+                
+                //Adiciona o novo participante em uma das duas listas
+                if(formulario.idade.value < 18)
+                    listaEstudantes.appendChild(Nli);
+                else
+                    listaAdultos.appendChild(Nli);
 
-            //Função chamada ao clickar num elemento
-            Nli.addEventListener("click", function(){
-                editaLista(Nli);    });
-            
-            //Adiciona o novo participante em uma das duas listas
-            if(formulario.idade.value < 18)
-                listaEstudantes.appendChild(Nli);
+                formulario.nome.focus();
+                formulario.reset();
+            }
             else
-                listaAdultos.appendChild(Nli);
-
-            formulario.nome.focus();
-            formulario.reset();
+                alert("Valores Invalidos!");
         }
 
         //Edita o participante selecionado
@@ -108,19 +127,7 @@
                 botaoCancelaSelecao.style.visibility="hidden";
             }
         }
-
-        //Estilos no formulario
-        document.getElementById("corpoform").style.border="thin solid black";
-        document.getElementById("corpoform").style.padding = "10px";
-        document.getElementById("corpoform").style.width = "250px";
-        document.getElementById("corpoform").style.margin = "5px";
-        document.getElementById("corpoform").style.textAlign = "right";
-        //Estilos nas listas
-        document.getElementById("corpoListas").style.border="thin solid black";
-        document.getElementById("corpoListas").style.padding = "10px";
-        document.getElementById("corpoListas").style.width = "250px";  
-        document.getElementById("corpoListas").style.margin = "5px";
-        document.getElementById("corpoListas").style.textAlign = "left";
+    
     </script>
 </body>
 </html>
