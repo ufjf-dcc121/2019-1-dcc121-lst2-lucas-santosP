@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Coleção de Animais</title>
+    <style>
+        div{
+            padding: 5px;
+            width: 200px;
+            margin: 5px;
+            text-Align: center;
+        }
+        div.corpoForm{
+            border: thin solid black;
+            padding: 5px;
+            width: 230px;
+            text-Align: right;
+        }
+        table{
+            padding: 1.5px;
+            width: 500px;
+            margin: 5px; 
+            text-Align: center;  
+        }
+        td.m{
+            border: 2px solid rgb(68, 68, 68)
+        }
+    </style>
+
+</head>
+<body>
+    <div class="corpoForm">
+        <form name="formAnimais">
+            <div><label>Animal:         <input type="text" name="animal"></label></div>   
+            <div><label>Altura(m):     <input type="number" name="altura" step="any"></label></div>
+            <div><label>Peso(kg):       <input type="number" name="peso" step="any"></label></div>
+            <div><label>Velocidade(km): <input type="number" name="velocidade" step="any"></label></div>
+            <div><label>Idade máxima:   <input type="number" name="idadeMax"></label></div>
+            <div>                       <input type="submit" style="width: 165px; height: 25px;"></div>
+        </form>
+    </div>
+    <br>
+
+    <table border="2px">
+        <thead>
+            <tr>
+                <td>ANIMAL</td>  <td>ALTURA</td> <td>PESO</td>  <td>VELOCIDADE</td>  <td>IDADE MAX.</td>
+            </tr>
+        </thead>
+
+        <tbody id="corpoTabela"> 
+        </tbody>
+
+            <td class="m">MÉDIAS</td>     <td id="a1" class="m"></td>  <td id="p1" class="m"></td>
+            <td id="v1" class="m"> </td>  <td id="l1" class="m"></td>
+    </table>
+
+    <ul id="lista">
+        <li>Mais Alto:    <span id="mA"/>   </li>
+        <li>Mais Pesado:  <span id="mP"/>   </li>
+        <li>Mais Veloz:   <span id="mV"/>   </li>
+        <li>Mais Longevo: <span id="mL"/>   </li>
+    </ul>
+
+    <span style="padding: 10px; width: 5px">Animais acima da media de peso: <spa id="acimasDaMedia"></spa></span>
+
+
+    <script>
+        var vet =[];
+        var formulario = document.forms.formAnimais;
+        var tabela = document.getElementById("corpoTabela");
+        var listaInfo = document.getElementById("lista");
+ 
+        formulario.addEventListener("submit", adiciona);
+
+        function adiciona(e){
+            e.preventDefault();
+            var eAnimal = formulario.animal.value;
+            var eAltura = Number(formulario.altura.value);
+            var ePeso = Number(formulario.peso.value);
+            var eVeloc = Number(formulario.velocidade.value);
+            var eIdade = Number(formulario.idadeMax.value);
+
+            if(eAnimal!="" && eAltura !="" && ePeso !="" && eVeloc !="" && eIdade!=""){
+                document.getElementById("acimasDaMedia").textContent ="";   //Esvazia os acimas da media
+                var novoAnimal = {
+                    "animal": eAnimal,
+                    "altura": eAltura,
+                    "peso": ePeso,
+                    "veloc": eVeloc,
+                    "idade": eIdade, 
+                };
+                console.log("Novo Animal:"+eAnimal);
+                vet.push(novoAnimal);
+
+                //Adicionando a nova linha na tabela
+                var novaLinha = document.createElement("tr");
+                for(var i=0; i<=4; i++){
+                    var novoTd = document.createElement("td");
+                    if(i==0)
+                        novoTd.textContent = eAnimal;
+                    else if(i==1)
+                        novoTd.textContent = eAltura;
+                    else if(i==2)
+                        novoTd.textContent = ePeso;
+                    else if(i==3)
+                        novoTd.textContent = eVeloc;
+                    else if(i==4)
+                        novoTd.textContent = eIdade;
+                         
+                    novaLinha.appendChild(novoTd);
+                }
+                tabela.appendChild(novaLinha);
+
+                //Calcula as medias
+                var tam=vet.length;
+                var mediaA=0; var mediaP=0; var mediaV=0; var mediaL=0;
+                for(var i=0; i<tam; i++){
+                    mediaA += vet[i].altura;
+                    mediaP += vet[i].peso;
+                    mediaV += vet[i].veloc;
+                    mediaL += vet[i].idade;
+                }
+                mediaA /= tam; mediaP /= tam; mediaV /= tam; mediaL /= tam;
+                //Adicionando as medias na lista
+                document.getElementById("a1").textContent = mediaA;
+                document.getElementById("p1").textContent = mediaP;
+                document.getElementById("v1").textContent = mediaV;
+                document.getElementById("l1").textContent = mediaL;
+                
+                //Adicionando os animais acima da media
+                var aux=false;  //Auxiliar só para permitir adicionar virgula depois do primeiro.
+                var acM = document.getElementById("acimasDaMedia");
+                for(var i=0; i<tam; i++){
+                    if(mediaP < vet[i].peso){
+                        var acimasMedia; 
+                        acimasMedia =" "+vet[i].animal;
+
+                        if(aux!=false){
+                            acM.textContent += ", "
+                        }
+                        acM.textContent += acimasMedia;
+                        aux=true;
+                    }
+                }
+                atualizaLista();    //Atualiza a lista de informações dos maiores
+                formulario.reset();
+                formulario.animal.focus();
+            }
+            else
+                alert("Valores Invalidos!");
+        }
+
+        function atualizaLista(){
+            //Pega os valores do primeiro animal no vetor. 
+            //Onde será comparado com o restante no for abaixo
+            var mAlto = vet[0].altura;
+            var mPesado = vet[0].peso;
+            var mVeloz = vet[0].veloc;
+            var mLongevo = vet[0].idade;
+            //Variaveis que terão o indice do maior animal em cada categoria
+            var iA = 0; var iP = 0; var iV = 0; var iL = 0;
+
+            for(var i=1; i<vet.length; i++){
+                if(vet[i].altura > mAlto){
+                    mAlto = vet[i].altura;  //Atualiza o valor da variavel para comparação
+                    iA=i;                   //Atualiza o valor do indice onde esta o maior da categoria
+                }
+                if(vet[i].peso > mPesado){
+                    mPesado = vet[i].peso;
+                    iP=i;
+                }
+                if(vet[i].veloc > mVeloz){
+                    mVeloz = vet[i].veloc;
+                    iV=i;    
+                }
+                if(vet[i].idade > mLongevo){
+                    mLongevo = vet[i].idade;
+                    iL=i;
+                }  
+            }
+            //Atualiza os valores na Lista com os maiores em cada categoria:
+            document.getElementById("mA").textContent = vet[iA].animal;
+            document.getElementById("mP").textContent = vet[iP].animal;
+            document.getElementById("mV").textContent = vet[iV].animal;
+            document.getElementById("mL").textContent = vet[iL].animal;
+        }
+    </script>
+</body>
+</html>
+
+
